@@ -71,6 +71,16 @@ export class Tab2Page implements OnInit {
     this.counterService.counters().reduce((sum, counter) => sum + counter.value, 0),
   );
 
+  readonly minimum = computed(() => {
+    const values = this.counterService.counters().map((c) => c.value);
+    return values.length === 0 ? null : Math.min(...values);
+  });
+
+  readonly maximum = computed(() => {
+    const values = this.counterService.counters().map((c) => c.value);
+    return values.length === 0 ? null : Math.max(...values);
+  });
+
   // Vyhľadávanie + radenie. Pri zmene dát alebo vstupu sa prepočíta automaticky.
   readonly visibleCounters = computed(() => {
     const term = normalize(this.searchTerm().trim());

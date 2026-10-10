@@ -23,7 +23,10 @@
       </ion-button>
     </div>
 
-    <!-- ===== SEM PATRÍ INDIVIDUÁLNA FUNKCIA (commit 4) ===== -->
+        <div class="stats">
+      <p>Minimum: <strong>{{ minimum() ?? '–' }}</strong></p>
+      <p>Maximum: <strong>{{ maximum() ?? '–' }}</strong></p>
+    </div>
 
     <ion-searchbar
       class="history-tools"

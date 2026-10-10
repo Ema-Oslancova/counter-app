@@ -59,4 +59,10 @@ describe('Tab2Page', () => {
     component.sortMode.set('name');
     expect(component.visibleCounters().map((c) => c.id)).toEqual(['b', 'a']);
   });
+
+    it('should compute the minimum and maximum of all counters', () => {
+    expect(component.minimum()).toBe(2);
+    expect(component.maximum()).toBe(5);
+  });
+
 });
