@@ -1,7 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SavedCounter } from '../models/saved-counter';
+import { CounterService } from '../services/counter.service';
 import { Tab1Page } from './tab1.page';
+
+vi.mock('@capacitor/preferences', () => ({
+  Preferences: { get: vi.fn(), set: vi.fn(), remove: vi.fn() },
+}));
 
 describe('Tab1Page', () => {
   let component: Tab1Page;
@@ -17,21 +22,19 @@ describe('Tab1Page', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should add the newest saved counter to the beginning', () => {
-    const first: SavedCounter = {
-      id: 'first',
-      name: 'První',
+  it('should pass the saved counter to the service and show a toast', async () => {
+    const service = TestBed.inject(CounterService);
+    const addSpy = vi.spyOn(service, 'add').mockResolvedValue();
+    const counter: SavedCounter = {
+      id: 'a',
+      name: 'Test',
       value: 1,
-    };
-    const second: SavedCounter = {
-      id: 'second',
-      name: 'Druhé',
-      value: 2,
+      createdAt: '2026-09-17T08:00:00.000Z',
     };
 
-    component.onSaved(first);
-    component.onSaved(second);
+    await component.onSaved(counter);
 
-    expect(component.savedCounters).toEqual([second, first]);
+    expect(addSpy).toHaveBeenCalledWith(counter);
+    expect(component.toastOpen()).toBe(true);
   });
 });
